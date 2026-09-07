@@ -10,33 +10,128 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ExploreRouteImport } from './routes/explore'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as RoutesIndexRouteImport } from './routes/routes/index'
+import { Route as RoutesIdRouteImport } from './routes/routes/$id'
+import { Route as TripsIndexRouteImport } from './routes/trips/index'
+import { Route as TripsIdRouteImport } from './routes/trips/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoutesIndexRoute = RoutesIndexRouteImport.update({
+  id: '/routes/',
+  path: '/routes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoutesIdRoute = RoutesIdRouteImport.update({
+  id: '/routes/$id',
+  path: '/routes/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TripsIndexRoute = TripsIndexRouteImport.update({
+  id: '/trips/',
+  path: '/trips/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TripsIdRoute = TripsIdRouteImport.update({
+  id: '/trips/$id',
+  path: '/trips/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/explore': typeof ExploreRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/routes/$id': typeof RoutesIdRoute
+  '/trips/$id': typeof TripsIdRoute
+  '/routes/': typeof RoutesIndexRoute
+  '/trips/': typeof TripsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/explore': typeof ExploreRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/routes/$id': typeof RoutesIdRoute
+  '/trips/$id': typeof TripsIdRoute
+  '/routes': typeof RoutesIndexRoute
+  '/trips': typeof TripsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/explore': typeof ExploreRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/routes/$id': typeof RoutesIdRoute
+  '/trips/$id': typeof TripsIdRoute
+  '/routes/': typeof RoutesIndexRoute
+  '/trips/': typeof TripsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/explore'
+    | '/profile'
+    | '/settings'
+    | '/routes/$id'
+    | '/trips/$id'
+    | '/routes/'
+    | '/trips/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/explore'
+    | '/profile'
+    | '/settings'
+    | '/routes/$id'
+    | '/trips/$id'
+    | '/routes'
+    | '/trips'
+  id:
+    | '__root__'
+    | '/'
+    | '/explore'
+    | '/profile'
+    | '/settings'
+    | '/routes/$id'
+    | '/trips/$id'
+    | '/routes/'
+    | '/trips/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ExploreRoute: typeof ExploreRoute
+  ProfileRoute: typeof ProfileRoute
+  SettingsRoute: typeof SettingsRoute
+  RoutesIdRoute: typeof RoutesIdRoute
+  TripsIdRoute: typeof TripsIdRoute
+  RoutesIndexRoute: typeof RoutesIndexRoute
+  TripsIndexRoute: typeof TripsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +143,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/routes/': {
+      id: '/routes/'
+      path: '/routes'
+      fullPath: '/routes/'
+      preLoaderRoute: typeof RoutesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/routes/$id': {
+      id: '/routes/$id'
+      path: '/routes/$id'
+      fullPath: '/routes/$id'
+      preLoaderRoute: typeof RoutesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trips/': {
+      id: '/trips/'
+      path: '/trips'
+      fullPath: '/trips/'
+      preLoaderRoute: typeof TripsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trips/$id': {
+      id: '/trips/$id'
+      path: '/trips/$id'
+      fullPath: '/trips/$id'
+      preLoaderRoute: typeof TripsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ExploreRoute: ExploreRoute,
+  ProfileRoute: ProfileRoute,
+  SettingsRoute: SettingsRoute,
+  RoutesIdRoute: RoutesIdRoute,
+  TripsIdRoute: TripsIdRoute,
+  RoutesIndexRoute: RoutesIndexRoute,
+  TripsIndexRoute: TripsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

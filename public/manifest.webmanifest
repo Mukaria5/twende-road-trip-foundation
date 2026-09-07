@@ -1,0 +1,25 @@
+{
+  "name": "TWENDE",
+  "short_name": "TWENDE",
+  "description": "Discover road trips, scenic drives and unforgettable places across Kenya.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#faf7f2",
+  "theme_color": "#a24a2a",
+  "icons": [
+    {
+      "src": "/icons/twende-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/twende-icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

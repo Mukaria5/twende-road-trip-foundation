@@ -3,11 +3,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/twende/app-shell";
 import { ExploreScreen } from "@/components/twende/explore-screen";
 
-const title = "TWENDE — Your next Kenyan road trip starts here";
+const title = "Explore Kenya by road — TWENDE";
 const description =
-  "Discover road trips, scenic drives and unforgettable places across Kenya. Plan the route, estimate the drive and keep a record of every journey.";
+  "Browse featured Kenyan road trips by category and region, from Rift Valley escarpments to the coast.";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/explore")({
   head: () => ({
     meta: [
       { title },
@@ -16,10 +16,10 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: description },
     ],
   }),
-  component: Index,
+  component: ExplorePage,
 });
 
-function Index() {
+function ExplorePage() {
   return (
     <AppShell>
       <ExploreScreen />
