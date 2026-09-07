@@ -1,11 +1,11 @@
-import { Link } from "@tanstack/react-router";
+import { Link, type LinkProps } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
 
 interface EmptyStateProps {
   icon: LucideIcon;
   title: string;
   description: string;
-  action?: { label: string; to: string };
+  action?: { label: string; to: LinkProps["to"] };
 }
 
 export function EmptyState({ icon: Icon, title, description, action }: EmptyStateProps) {

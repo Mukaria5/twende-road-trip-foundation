@@ -1,10 +1,10 @@
-import { Link } from "@tanstack/react-router";
+import { Link, type LinkProps } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
 interface SectionHeaderProps {
   title: string;
   description?: string;
-  action?: { label: string; to: string };
+  action?: { label: string; to: LinkProps["to"] };
   children?: ReactNode;
 }
 

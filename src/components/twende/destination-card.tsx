@@ -1,10 +1,10 @@
-import { Link } from "@tanstack/react-router";
+import { Link, type LinkProps } from "@tanstack/react-router";
 
 interface DestinationCardProps {
   name: string;
   image: string;
   caption?: string;
-  to?: string;
+  to?: LinkProps["to"];
 }
 
 export function DestinationCard({ name, image, caption, to = "/routes" }: DestinationCardProps) {
