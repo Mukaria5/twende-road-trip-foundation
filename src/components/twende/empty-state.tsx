@@ -5,7 +5,7 @@ interface EmptyStateProps {
   icon: LucideIcon;
   title: string;
   description: string;
-  action?: { label: string; to: LinkProps["to"] };
+  action?: { label: string; to: NonNullable<LinkProps["to"]> };
 }
 
 export function EmptyState({ icon: Icon, title, description, action }: EmptyStateProps) {

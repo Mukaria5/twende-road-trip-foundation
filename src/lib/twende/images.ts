@@ -33,8 +33,10 @@ export function routeImage(route: {
   hero_image?: string | null;
 }): string {
   if (route.hero_image) return route.hero_image;
-  if (route.slug && bySlug[route.slug]) return bySlug[route.slug];
-  if (route.region && byRegion[route.region]) return byRegion[route.region];
+  const slugMatch = route.slug ? bySlug[route.slug] : undefined;
+  if (slugMatch) return slugMatch;
+  const regionMatch = route.region ? byRegion[route.region] : undefined;
+  if (regionMatch) return regionMatch;
   return naivasha;
 }
 

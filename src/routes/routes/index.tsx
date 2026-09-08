@@ -20,8 +20,8 @@ import {
 import { routesQuery } from "@/lib/twende/queries";
 
 interface RoutesSearch {
-  q?: string;
-  category?: string;
+  q?: string | undefined;
+  category?: string | undefined;
 }
 
 const title = "Road Trips across Kenya — TWENDE";
@@ -29,8 +29,8 @@ const description = "Find your next drive across Kenya. Filter by category, dura
 
 export const Route = createFileRoute("/routes/")({
   validateSearch: (search: Record<string, unknown>): RoutesSearch => ({
-    q: typeof search.q === "string" ? search.q : undefined,
-    category: typeof search.category === "string" ? search.category : undefined,
+    q: typeof search['q'] === "string" ? search['q'] : undefined,
+    category: typeof search['category'] === "string" ? search['category'] : undefined,
   }),
   head: () => ({
     meta: [

@@ -3,7 +3,7 @@ import { Car, Fuel } from "lucide-react";
 import type { VehicleRecord } from "@/lib/twende/types";
 
 interface VehicleCardProps {
-  vehicle?: VehicleRecord;
+  vehicle?: VehicleRecord | undefined;
 }
 
 /** Fuel estimation is a later phase, so an unset vehicle shows a clear prompt. */
