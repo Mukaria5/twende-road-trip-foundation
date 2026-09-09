@@ -19,6 +19,7 @@ export type Database = {
           avatar_url: string | null
           bio: string | null
           created_at: string
+          fuel_price_per_litre: number | null
           full_name: string | null
           home_county: string | null
           id: string
@@ -29,6 +30,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
+          fuel_price_per_litre?: number | null
           full_name?: string | null
           home_county?: string | null
           id: string
@@ -39,6 +41,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
+          fuel_price_per_litre?: number | null
           full_name?: string | null
           home_county?: string | null
           id?: string
@@ -241,14 +244,22 @@ export type Database = {
           actual_fuel_litres: number | null
           completed_at: string | null
           created_at: string
+          estimated_accommodation_cost: number | null
+          estimated_activity_cost: number | null
+          estimated_food_cost: number | null
           estimated_fuel_cost: number | null
           estimated_fuel_litres: number | null
+          estimated_other_cost: number | null
+          estimated_total_cost: number | null
           id: string
           notes: string | null
+          planned_distance_km: number | null
           route_id: string | null
           started_at: string | null
           status: string
           title: string | null
+          travellers: number
+          trip_type: string
           updated_at: string
           user_id: string
           vehicle_id: string | null
@@ -260,14 +271,22 @@ export type Database = {
           actual_fuel_litres?: number | null
           completed_at?: string | null
           created_at?: string
+          estimated_accommodation_cost?: number | null
+          estimated_activity_cost?: number | null
+          estimated_food_cost?: number | null
           estimated_fuel_cost?: number | null
           estimated_fuel_litres?: number | null
+          estimated_other_cost?: number | null
+          estimated_total_cost?: number | null
           id?: string
           notes?: string | null
+          planned_distance_km?: number | null
           route_id?: string | null
           started_at?: string | null
           status?: string
           title?: string | null
+          travellers?: number
+          trip_type?: string
           updated_at?: string
           user_id: string
           vehicle_id?: string | null
@@ -279,14 +298,22 @@ export type Database = {
           actual_fuel_litres?: number | null
           completed_at?: string | null
           created_at?: string
+          estimated_accommodation_cost?: number | null
+          estimated_activity_cost?: number | null
+          estimated_food_cost?: number | null
           estimated_fuel_cost?: number | null
           estimated_fuel_litres?: number | null
+          estimated_other_cost?: number | null
+          estimated_total_cost?: number | null
           id?: string
           notes?: string | null
+          planned_distance_km?: number | null
           route_id?: string | null
           started_at?: string | null
           status?: string
           title?: string | null
+          travellers?: number
+          trip_type?: string
           updated_at?: string
           user_id?: string
           vehicle_id?: string | null

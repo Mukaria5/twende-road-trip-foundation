@@ -13,7 +13,7 @@ import { formatDistance, formatDuration } from "@/lib/twende/format";
 import { routeImage } from "@/lib/twende/images";
 import { routeBySlugQuery } from "@/lib/twende/queries";
 
-export const Route = createFileRoute("/routes/$id")({
+export const Route = createFileRoute("/routes/$id/")({
   head: () => ({
     meta: [
       { title: "Route details — TWENDE" },
@@ -82,7 +82,7 @@ function RouteDetailPage() {
 
             <div className="mt-5 flex flex-wrap gap-2">
               <Link
-                to="/plan/$id"
+                to="/routes/$id/plan"
                 params={{ id }}
                 className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
               >
