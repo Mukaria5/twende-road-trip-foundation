@@ -44,7 +44,23 @@ export const routeBySlugQuery = (slug: string) =>
     },
   });
 
+export const savedRouteQuery = (userId: string | null, routeId: string) =>
+  queryOptions({
+    queryKey: ["saved-route", userId, routeId],
+    enabled: Boolean(userId),
+    queryFn: async (): Promise<boolean> => {
+      const { data, error } = await supabase
+        .from("saved_routes")
+        .select("id")
+        .eq("route_id", routeId)
+        .maybeSingle();
+      if (error) throw error;
+      return Boolean(data);
+    },
+  });
+
 export const tripsQuery = (userId: string | null) =>
+
   queryOptions({
     queryKey: ["trips", userId],
     enabled: Boolean(userId),
