@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 interface SectionHeaderProps {
   title: string;
-  description?: string;
+  description?: string | undefined;
   action?: { label: string; to: NonNullable<LinkProps["to"]> };
   children?: ReactNode;
 }

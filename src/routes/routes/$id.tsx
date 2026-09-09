@@ -3,8 +3,11 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowLeft, Clock, Fuel, MapPin, Mountain, Wallet } from "lucide-react";
 
 import { AppShell } from "@/components/twende/app-shell";
+import { JourneyTimeline } from "@/components/twende/journey-timeline";
 import { MapPlaceholder } from "@/components/twende/map-placeholder";
+import { SaveRouteButton } from "@/components/twende/save-route-button";
 import { SectionHeader } from "@/components/twende/section-header";
+import { ShareButton } from "@/components/twende/share-button";
 import { CardSkeleton, ErrorState } from "@/components/twende/states";
 import { formatDistance, formatDuration } from "@/lib/twende/format";
 import { routeImage } from "@/lib/twende/images";
@@ -68,32 +71,39 @@ function RouteDetailPage() {
               {data.route.region ?? "Kenya"}
             </p>
             <h1 className="mt-2 text-3xl md:text-4xl">{data.route.name}</h1>
+            <p className="mt-2 text-sm font-medium text-muted-foreground">
+              {data.route.starting_location} → {data.route.destination}
+            </p>
             {data.route.description && (
               <p className="mt-3 max-w-2xl text-sm text-muted-foreground md:text-base">
                 {data.route.description}
               </p>
             )}
-            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <Fact
-                icon={MapPin}
-                label="Distance"
-                value={formatDistance(data.route.distance_km)}
+
+            <div className="mt-5 flex flex-wrap gap-2">
+              <Link
+                to="/plan/$id"
+                params={{ id }}
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                Plan this trip
+              </Link>
+              <SaveRouteButton routeId={data.route.id} />
+              <ShareButton
+                title={`${data.route.name} — TWENDE`}
+                text={data.route.description ?? undefined}
               />
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <Fact icon={MapPin} label="Distance" value={formatDistance(data.route.distance_km)} />
               <Fact
                 icon={Clock}
                 label="Drive time"
                 value={formatDuration(data.route.estimated_drive_minutes)}
               />
-              <Fact
-                icon={Mountain}
-                label="Difficulty"
-                value={data.route.difficulty ?? "—"}
-              />
-              <Fact
-                icon={Clock}
-                label="Best time"
-                value={data.route.best_time_to_visit ?? "—"}
-              />
+              <Fact icon={Mountain} label="Difficulty" value={data.route.difficulty ?? "—"} />
+              <Fact icon={Clock} label="Best time" value={data.route.best_time_to_visit ?? "—"} />
             </div>
             <p className="mt-3 text-xs text-muted-foreground">
               Distances and drive times are curated estimates and will be verified against a
@@ -107,31 +117,34 @@ function RouteDetailPage() {
           </section>
 
           <section>
-            <SectionHeader title="Stops along the way" />
+            <SectionHeader
+              title="The journey"
+              description={
+                data.stops.length > 0
+                  ? "Curated stops along the way, in driving order."
+                  : undefined
+              }
+            />
             {data.stops.length === 0 ? (
               <p className="rounded-2xl border border-dashed border-border bg-card p-5 text-sm text-muted-foreground">
                 Curated stops for this route haven't been added yet.
               </p>
             ) : (
-              <ol className="space-y-3">
-                {data.stops.map((stop, index) => (
-                  <li
-                    key={stop.id}
-                    className="flex gap-4 rounded-2xl border border-border bg-card p-4"
-                  >
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-foreground">
-                      {index + 1}
-                    </span>
-                    <div>
-                      <p className="font-medium">{stop.name}</p>
-                      {stop.description && (
-                        <p className="text-sm text-muted-foreground">{stop.description}</p>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ol>
+              <JourneyTimeline stops={data.stops} />
             )}
+          </section>
+
+          <section>
+            <SectionHeader title="What to expect" />
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Detail label="Recommended duration" value={data.route.recommended_duration} />
+              <Detail label="Best time to visit" value={data.route.best_time_to_visit} />
+              <Detail label="Difficulty" value={data.route.difficulty} />
+              <Detail
+                label="Categories"
+                value={data.route.category.length > 0 ? data.route.category.join(" · ") : null}
+              />
+            </div>
           </section>
 
           <section>
@@ -152,6 +165,15 @@ function RouteDetailPage() {
         </article>
       )}
     </AppShell>
+  );
+}
+
+function Detail({ label, value }: { label: string; value: string | null }) {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-4">
+      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="mt-1 text-sm font-medium">{value ?? "Not documented yet"}</p>
+    </div>
   );
 }
 
