@@ -74,6 +74,20 @@ export const tripsQuery = (userId: string | null) =>
     },
   });
 
+export const profileQuery = (userId: string | null) =>
+  queryOptions({
+    queryKey: ["profile", userId],
+    enabled: Boolean(userId),
+    queryFn: async (): Promise<{ fuel_price_per_litre: number | null } | null> => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("fuel_price_per_litre")
+        .maybeSingle();
+      if (error) throw error;
+      return data ?? null;
+    },
+  });
+
 export const vehiclesQuery = (userId: string | null) =>
   queryOptions({
     queryKey: ["vehicles", userId],
