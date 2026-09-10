@@ -218,7 +218,7 @@ function PlanTripPage() {
                   >
                     {vehicles.map((item) => (
                       <option key={item.id} value={item.id}>
-                        {item.name ?? [item.make, item.model].filter(Boolean).join(" ") || "Vehicle"}
+                        {item.name ?? ([item.make, item.model].filter(Boolean).join(" ") || "Vehicle")}
                       </option>
                     ))}
                   </select>
