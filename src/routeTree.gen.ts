@@ -19,6 +19,8 @@ import { Route as RoutesIndexRouteImport } from './routes/routes/index'
 import { Route as TripsIndexRouteImport } from './routes/trips/index'
 import { Route as TripsIdRouteImport } from './routes/trips/$id'
 import { Route as RoutesIdIndexRouteImport } from './routes/routes/$id/index'
+import { Route as RoutesIdPlanRouteImport } from './routes/routes/$id/plan'
+import { Route as TripsActiveIdRouteImport } from './routes/trips/active.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -70,6 +72,16 @@ const RoutesIdIndexRoute = RoutesIdIndexRouteImport.update({
   path: '/routes/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RoutesIdPlanRoute = RoutesIdPlanRouteImport.update({
+  id: '/routes/$id/plan',
+  path: '/routes/$id/plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TripsActiveIdRoute = TripsActiveIdRouteImport.update({
+  id: '/trips/active/$id',
+  path: '/trips/active/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -81,6 +93,8 @@ export interface FileRoutesByFullPath {
   '/trips/$id': typeof TripsIdRoute
   '/routes/': typeof RoutesIndexRoute
   '/trips/': typeof TripsIndexRoute
+  '/routes/$id/plan': typeof RoutesIdPlanRoute
+  '/trips/active/$id': typeof TripsActiveIdRoute
   '/routes/$id/': typeof RoutesIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -93,6 +107,8 @@ export interface FileRoutesByTo {
   '/trips/$id': typeof TripsIdRoute
   '/routes': typeof RoutesIndexRoute
   '/trips': typeof TripsIndexRoute
+  '/routes/$id/plan': typeof RoutesIdPlanRoute
+  '/trips/active/$id': typeof TripsActiveIdRoute
   '/routes/$id': typeof RoutesIdIndexRoute
 }
 export interface FileRoutesById {
@@ -106,6 +122,8 @@ export interface FileRoutesById {
   '/trips/$id': typeof TripsIdRoute
   '/routes/': typeof RoutesIndexRoute
   '/trips/': typeof TripsIndexRoute
+  '/routes/$id/plan': typeof RoutesIdPlanRoute
+  '/trips/active/$id': typeof TripsActiveIdRoute
   '/routes/$id/': typeof RoutesIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -120,6 +138,8 @@ export interface FileRouteTypes {
     | '/trips/$id'
     | '/routes/'
     | '/trips/'
+    | '/routes/$id/plan'
+    | '/trips/active/$id'
     | '/routes/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -132,6 +152,8 @@ export interface FileRouteTypes {
     | '/trips/$id'
     | '/routes'
     | '/trips'
+    | '/routes/$id/plan'
+    | '/trips/active/$id'
     | '/routes/$id'
   id:
     | '__root__'
@@ -144,6 +166,8 @@ export interface FileRouteTypes {
     | '/trips/$id'
     | '/routes/'
     | '/trips/'
+    | '/routes/$id/plan'
+    | '/trips/active/$id'
     | '/routes/$id/'
   fileRoutesById: FileRoutesById
 }
@@ -157,6 +181,8 @@ export interface RootRouteChildren {
   TripsIdRoute: typeof TripsIdRoute
   RoutesIndexRoute: typeof RoutesIndexRoute
   TripsIndexRoute: typeof TripsIndexRoute
+  RoutesIdPlanRoute: typeof RoutesIdPlanRoute
+  TripsActiveIdRoute: typeof TripsActiveIdRoute
   RoutesIdIndexRoute: typeof RoutesIdIndexRoute
 }
 
@@ -232,6 +258,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RoutesIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/routes/$id/plan': {
+      id: '/routes/$id/plan'
+      path: '/routes/$id/plan'
+      fullPath: '/routes/$id/plan'
+      preLoaderRoute: typeof RoutesIdPlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trips/active/$id': {
+      id: '/trips/active/$id'
+      path: '/trips/active/$id'
+      fullPath: '/trips/active/$id'
+      preLoaderRoute: typeof TripsActiveIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -245,6 +285,8 @@ const rootRouteChildren: RootRouteChildren = {
   TripsIdRoute: TripsIdRoute,
   RoutesIndexRoute: RoutesIndexRoute,
   TripsIndexRoute: TripsIndexRoute,
+  RoutesIdPlanRoute: RoutesIdPlanRoute,
+  TripsActiveIdRoute: TripsActiveIdRoute,
   RoutesIdIndexRoute: RoutesIdIndexRoute,
 }
 export const routeTree = rootRouteImport
