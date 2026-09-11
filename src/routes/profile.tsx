@@ -1,6 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { ChevronRight, Fuel, LogIn, Settings, SlidersHorizontal } from "lucide-react";
+import {
+  ChevronRight,
+  Fuel,
+  LogIn,
+  Pencil,
+  Plus,
+  Settings,
+  SlidersHorizontal,
+  Trash2,
+} from "lucide-react";
+import { toast } from "sonner";
 
 import { AppShell } from "@/components/twende/app-shell";
 import { EmptyState } from "@/components/twende/empty-state";
@@ -9,8 +20,11 @@ import { SectionHeader } from "@/components/twende/section-header";
 import { StatCard } from "@/components/twende/stat-card";
 import { CardSkeleton } from "@/components/twende/states";
 import { VehicleCard } from "@/components/twende/vehicle-card";
+import { VehicleForm } from "@/components/twende/vehicle-form";
 import { useSession } from "@/hooks/use-session";
+import { supabase } from "@/integrations/supabase/client";
 import { vehiclesQuery } from "@/lib/twende/queries";
+import type { VehicleRecord } from "@/lib/twende/types";
 
 const title = "Profile — TWENDE";
 const description = "Your TWENDE profile, vehicle, fuel and travel preferences.";
@@ -29,7 +43,6 @@ export const Route = createFileRoute("/profile")({
 
 function ProfilePage() {
   const { user, loading } = useSession();
-  const { data: vehicles } = useQuery(vehiclesQuery(user?.id ?? null));
 
   if (loading) {
     return (
@@ -77,8 +90,11 @@ function ProfilePage() {
       </p>
 
       <section className="mt-10">
-        <SectionHeader title="Vehicle" description="Used for future fuel estimates." />
-        <VehicleCard vehicle={vehicles?.[0]} />
+        <SectionHeader
+          title="Your vehicles"
+          description="Your vehicle's consumption powers trip fuel estimates."
+        />
+        <VehiclesSection userId={user.id} />
       </section>
 
       <section className="mt-10">
@@ -98,6 +114,82 @@ function ProfilePage() {
         </div>
       </section>
     </AppShell>
+  );
+}
+
+function VehiclesSection({ userId }: { userId: string }) {
+  const queryClient = useQueryClient();
+  const { data: vehicles, isLoading } = useQuery(vehiclesQuery(userId));
+  /** "new" for the add form, a vehicle id when editing, or null when closed. */
+  const [editing, setEditing] = useState<string | null>(null);
+
+  const remove = useMutation({
+    mutationFn: async (vehicleId: string) => {
+      const { error } = await supabase.from("vehicles").delete().eq("id", vehicleId);
+      if (error) throw error;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["vehicles"] });
+      toast.success("Vehicle removed");
+    },
+    onError: () => toast.error("Couldn't remove the vehicle. Try again."),
+  });
+
+  if (isLoading) return <CardSkeleton />;
+
+  const list = vehicles ?? [];
+
+  return (
+    <div className="space-y-3">
+      {list.map((vehicle) =>
+        editing === vehicle.id ? (
+          <VehicleForm
+            key={vehicle.id}
+            userId={userId}
+            vehicle={vehicle}
+            onDone={() => setEditing(null)}
+          />
+        ) : (
+          <div key={vehicle.id} className="relative">
+            <VehicleCard vehicle={vehicle} />
+            <div className="absolute bottom-3 right-3 flex gap-1">
+              <button
+                type="button"
+                aria-label="Edit vehicle"
+                onClick={() => setEditing(vehicle.id)}
+                className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                <Pencil className="size-4" strokeWidth={1.75} />
+              </button>
+              <button
+                type="button"
+                aria-label="Delete vehicle"
+                disabled={remove.isPending}
+                onClick={() => {
+                  if (window.confirm("Remove this vehicle?")) remove.mutate(vehicle.id);
+                }}
+                className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-destructive"
+              >
+                <Trash2 className="size-4" strokeWidth={1.75} />
+              </button>
+            </div>
+          </div>
+        ),
+      )}
+
+      {editing === "new" ? (
+        <VehicleForm userId={userId} onDone={() => setEditing(null)} />
+      ) : (
+        <button
+          type="button"
+          onClick={() => setEditing("new")}
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-border bg-card px-5 py-4 text-sm font-medium text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+        >
+          <Plus className="size-4" strokeWidth={1.75} aria-hidden />
+          {list.length === 0 ? "Add your vehicle" : "Add another vehicle"}
+        </button>
+      )}
+    </div>
   );
 }
 
