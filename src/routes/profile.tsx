@@ -117,6 +117,82 @@ function ProfilePage() {
   );
 }
 
+function VehiclesSection({ userId }: { userId: string }) {
+  const queryClient = useQueryClient();
+  const { data: vehicles, isLoading } = useQuery(vehiclesQuery(userId));
+  /** "new" for the add form, a vehicle id when editing, or null when closed. */
+  const [editing, setEditing] = useState<string | null>(null);
+
+  const remove = useMutation({
+    mutationFn: async (vehicleId: string) => {
+      const { error } = await supabase.from("vehicles").delete().eq("id", vehicleId);
+      if (error) throw error;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["vehicles"] });
+      toast.success("Vehicle removed");
+    },
+    onError: () => toast.error("Couldn't remove the vehicle. Try again."),
+  });
+
+  if (isLoading) return <CardSkeleton />;
+
+  const list = vehicles ?? [];
+
+  return (
+    <div className="space-y-3">
+      {list.map((vehicle) =>
+        editing === vehicle.id ? (
+          <VehicleForm
+            key={vehicle.id}
+            userId={userId}
+            vehicle={vehicle}
+            onDone={() => setEditing(null)}
+          />
+        ) : (
+          <div key={vehicle.id} className="relative">
+            <VehicleCard vehicle={vehicle} />
+            <div className="absolute right-3 top-3 flex gap-1">
+              <button
+                type="button"
+                aria-label="Edit vehicle"
+                onClick={() => setEditing(vehicle.id)}
+                className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                <Pencil className="size-4" strokeWidth={1.75} />
+              </button>
+              <button
+                type="button"
+                aria-label="Delete vehicle"
+                disabled={remove.isPending}
+                onClick={() => {
+                  if (window.confirm("Remove this vehicle?")) remove.mutate(vehicle.id);
+                }}
+                className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-destructive"
+              >
+                <Trash2 className="size-4" strokeWidth={1.75} />
+              </button>
+            </div>
+          </div>
+        ),
+      )}
+
+      {editing === "new" ? (
+        <VehicleForm userId={userId} onDone={() => setEditing(null)} />
+      ) : (
+        <button
+          type="button"
+          onClick={() => setEditing("new")}
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-border bg-card px-5 py-4 text-sm font-medium text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+        >
+          <Plus className="size-4" strokeWidth={1.75} aria-hidden />
+          {list.length === 0 ? "Add your vehicle" : "Add another vehicle"}
+        </button>
+      )}
+    </div>
+  );
+}
+
 function PreferenceRow({
   icon: Icon,
   label,
