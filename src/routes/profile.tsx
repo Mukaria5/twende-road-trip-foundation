@@ -90,8 +90,11 @@ function ProfilePage() {
       </p>
 
       <section className="mt-10">
-        <SectionHeader title="Vehicle" description="Used for future fuel estimates." />
-        <VehicleCard vehicle={vehicles?.[0]} />
+        <SectionHeader
+          title="Your vehicles"
+          description="Your vehicle's consumption powers trip fuel estimates."
+        />
+        <VehiclesSection userId={user.id} />
       </section>
 
       <section className="mt-10">
