@@ -43,7 +43,6 @@ export const Route = createFileRoute("/profile")({
 
 function ProfilePage() {
   const { user, loading } = useSession();
-  const { data: vehicles } = useQuery(vehiclesQuery(user?.id ?? null));
 
   if (loading) {
     return (
