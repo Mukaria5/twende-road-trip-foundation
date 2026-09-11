@@ -152,7 +152,7 @@ function VehiclesSection({ userId }: { userId: string }) {
         ) : (
           <div key={vehicle.id} className="relative">
             <VehicleCard vehicle={vehicle} />
-            <div className="absolute right-3 top-3 flex gap-1">
+            <div className="absolute bottom-3 right-3 flex gap-1">
               <button
                 type="button"
                 aria-label="Edit vehicle"
