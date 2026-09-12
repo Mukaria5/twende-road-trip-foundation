@@ -33,12 +33,21 @@ export interface TripRecord {
   id: string;
   user_id: string;
   route_id: string | null;
+  vehicle_id: string | null;
   title: string | null;
   status: string;
+  trip_type: string;
   started_at: string | null;
   completed_at: string | null;
+  planned_distance_km: number | null;
+  travellers: number;
   actual_distance_km: number | null;
   actual_duration_minutes: number | null;
+  estimated_fuel_litres: number | null;
+  estimated_fuel_cost: number | null;
+  estimated_total_cost: number | null;
+  actual_fuel_litres: number | null;
+  actual_fuel_cost: number | null;
   notes: string | null;
   created_at: string;
 }
