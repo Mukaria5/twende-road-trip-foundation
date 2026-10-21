@@ -20,7 +20,7 @@ import { SectionHeader } from "@/components/twende/section-header";
 import { CardSkeleton, ErrorState } from "@/components/twende/states";
 import { useSession } from "@/hooks/use-session";
 
-import { formatClock, formatElapsed, trackDistanceKm } from "@/lib/twende/geo";
+import { formatClock, trackDistanceKm } from "@/lib/twende/geo";
 import { formatKes, formatLitres } from "@/lib/twende/fuel";
 import { formatDate, formatDistance, formatDuration } from "@/lib/twende/format";
 import {
