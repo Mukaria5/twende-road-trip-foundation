@@ -69,10 +69,6 @@ function TripsPage() {
         </>
       )}
 
-      <p className="mt-8 text-xs text-muted-foreground">
-        Trip recording — distance, duration, stops, photos and fuel used — arrives in a later
-        phase.
-      </p>
     </AppShell>
   );
 }

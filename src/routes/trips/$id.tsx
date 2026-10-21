@@ -392,4 +392,3 @@ function Tally({ label, value, hint }: { label: string; value: string; hint?: st
   );
 }
 
-export { supabase };
