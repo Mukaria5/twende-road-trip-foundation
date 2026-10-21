@@ -19,7 +19,7 @@ import { MapPlaceholder } from "@/components/twende/map-placeholder";
 import { SectionHeader } from "@/components/twende/section-header";
 import { CardSkeleton, ErrorState } from "@/components/twende/states";
 import { useSession } from "@/hooks/use-session";
-import { supabase } from "@/integrations/supabase/client";
+
 import { formatClock, formatElapsed, trackDistanceKm } from "@/lib/twende/geo";
 import { formatKes, formatLitres } from "@/lib/twende/fuel";
 import { formatDate, formatDistance, formatDuration } from "@/lib/twende/format";
@@ -31,7 +31,7 @@ import {
   tripStopsQuery,
   tripTrackQuery,
 } from "@/lib/twende/trip-queries";
-import { formatDate as formatDateShort } from "@/lib/twende/format";
+
 
 export const Route = createFileRoute("/trips/$id")({
   head: () => ({
@@ -354,11 +354,8 @@ function TripDetailPage() {
 
       <p className="mt-10 text-xs text-muted-foreground">
         Distance is measured locally from your phone's GPS points — nothing is estimated on your
-        behalf. Started {formatDateShort(record.started_at ?? record.created_at)}
-        {completedAt ? ` · finished ${formatClock(completedAt)}` : ""}.
-        {formatElapsed((durationMinutes ?? 0) * 60_000) !== "0m"
-          ? ` Total time ${formatElapsed((durationMinutes ?? 0) * 60_000)}.`
-          : ""}
+        behalf.
+
       </p>
     </AppShell>
   );

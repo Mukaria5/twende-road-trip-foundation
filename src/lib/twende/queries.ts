@@ -59,20 +59,35 @@ export const savedRouteQuery = (userId: string | null, routeId: string) =>
     },
   });
 
-export const tripsQuery = (userId: string | null) =>
+/** A trip as shown in My Trips, with stop/photo counts folded in. */
+export interface TripListItem extends TripRecord {
+  stop_count: number;
+  photo_count: number;
+}
 
+export const tripsQuery = (userId: string | null) =>
   queryOptions({
     queryKey: ["trips", userId],
     enabled: Boolean(userId),
-    queryFn: async (): Promise<TripRecord[]> => {
+    queryFn: async (): Promise<TripListItem[]> => {
       const { data, error } = await supabase
         .from("trips")
-        .select("*")
+        .select("*, trip_stops(count), trip_photos(count)")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return (data ?? []) as unknown as TripRecord[];
+      return ((data ?? []) as unknown as Array<
+        TripRecord & {
+          trip_stops?: Array<{ count: number }>;
+          trip_photos?: Array<{ count: number }>;
+        }
+      >).map((row) => ({
+        ...row,
+        stop_count: row.trip_stops?.[0]?.count ?? 0,
+        photo_count: row.trip_photos?.[0]?.count ?? 0,
+      }));
     },
   });
+
 
 export const profileQuery = (userId: string | null) =>
   queryOptions({
