@@ -110,7 +110,18 @@ function TripDetailPage() {
     (startedAt && completedAt ? Math.round((completedAt - startedAt) / 60_000) : null);
   const trackPoints = track.data ?? [];
   const measuredDistance =
-    record.actual_distance_km ?? (trackPoints.length ? trackDistanceKm(trackPoints) : null);
+    record.actual_distance_km ??
+    (trackPoints.length
+      ? trackDistanceKm(
+          trackPoints.map((point) => ({
+            latitude: point.latitude,
+            longitude: point.longitude,
+            accuracy: point.accuracy,
+            recorded_at: new Date(point.recorded_at).getTime(),
+          })),
+        )
+      : null);
+
   const fuelRows = fuel.data ?? [];
   const fuelLitres = fuelRows.reduce((total, row) => total + Number(row.litres ?? 0), 0);
   const fuelCost = fuelRows.reduce((total, row) => total + Number(row.total_cost ?? 0), 0);
@@ -379,7 +390,7 @@ function Metric({
   );
 }
 
-function Tally({ label, value, hint }: { label: string; value: string; hint?: string }) {
+function Tally({ label, value, hint }: { label: string; value: string; hint?: string | undefined }) {
   return (
     <div className="rounded-2xl border border-border bg-card p-4">
       <p className="text-xs text-muted-foreground">{label}</p>

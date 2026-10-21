@@ -3,7 +3,7 @@ import { CalendarDays, Fuel, Gauge, MapPin } from "lucide-react";
 
 import { formatKes, formatLitres } from "@/lib/twende/fuel";
 import { formatDate, formatDistance, formatDuration } from "@/lib/twende/format";
-import type { TripListItem } from "@/lib/twende/trip-queries";
+import type { TripListItem } from "@/lib/twende/queries";
 
 export function TripCard({ trip }: { trip: TripListItem }) {
   const isCompleted = trip.status === "completed";
