@@ -3,6 +3,7 @@ import { Compass, Map as MapIcon, MapPinned, Route as RouteIcon, Settings, Users
 import type { ReactNode } from "react";
 
 import { BottomNavigation } from "./bottom-navigation";
+import { Wordmark } from "./wordmark";
 import { cn } from "@/lib/utils";
 
 const primaryItems = [
@@ -120,6 +121,3 @@ function SidebarItem({
     </Link>
   );
 }
-
-// Imported late to keep the import list tidy for the mobile header.
-import { Wordmark } from "./wordmark";

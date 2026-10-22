@@ -4,17 +4,18 @@ interface PageHeaderProps {
   eyebrow?: string;
 }
 
+/** Compact, app-style page title block. */
 export function PageHeader({ title, description, eyebrow }: PageHeaderProps) {
   return (
-    <div className="mb-6">
+    <div className="mb-5">
       {eyebrow && (
-        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+        <p className="mb-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
           {eyebrow}
         </p>
       )}
-      <h1 className="text-3xl md:text-4xl">{title}</h1>
+      <h1 className="text-2xl md:text-3xl">{title}</h1>
       {description && (
-        <p className="mt-2 max-w-xl text-sm text-muted-foreground md:text-base">{description}</p>
+        <p className="mt-1.5 max-w-xl text-sm text-muted-foreground">{description}</p>
       )}
     </div>
   );
