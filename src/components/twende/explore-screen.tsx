@@ -8,7 +8,6 @@ import { RouteCard } from "./route-card";
 import { SearchBar } from "./search-bar";
 import { SectionHeader } from "./section-header";
 import { CardGridSkeleton, ErrorState } from "./states";
-import { Wordmark } from "./wordmark";
 import { TRIP_CATEGORIES } from "@/lib/twende/categories";
 import { regionImages } from "@/lib/twende/images";
 import { routesQuery } from "@/lib/twende/queries";
@@ -34,11 +33,10 @@ export function ExploreScreen() {
   }
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-8 md:space-y-12">
       <section>
-        <Wordmark size="sm" className="text-muted-foreground md:hidden" />
-        <h1 className="mt-4 text-3xl md:text-5xl">Where will the road take you?</h1>
-        <p className="mt-3 max-w-lg text-sm text-muted-foreground md:text-base">
+        <h1 className="text-2xl md:text-5xl">Where will the road take you?</h1>
+        <p className="mt-2 max-w-lg text-sm text-muted-foreground md:text-base">
           Discover road trips, scenic drives and unforgettable places across Kenya.
         </p>
 
