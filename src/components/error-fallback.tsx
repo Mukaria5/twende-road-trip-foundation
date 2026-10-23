@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
 
 /** Loaded lazily via React.lazy because the router expects an async error component. */
-export default function ErrorFallback({ error, reset }: { error: Error; reset: () => void }) {
+export default function ErrorFallback({ error, reset }: { error: unknown; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
