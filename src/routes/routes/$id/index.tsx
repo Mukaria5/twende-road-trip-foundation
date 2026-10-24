@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { ArrowLeft, Clock, Fuel, MapPin, Mountain, Wallet } from "lucide-react";
+import { ArrowLeft, Clock, MapPin, Mountain } from "lucide-react";
 
 import { AppShell } from "@/components/twende/app-shell";
 import { JourneyTimeline } from "@/components/twende/journey-timeline";
@@ -148,18 +148,22 @@ function RouteDetailPage() {
           </section>
 
           <section>
-            <SectionHeader title="Trip planning" description="Arriving in a later phase." />
-            <div className="grid gap-3 sm:grid-cols-2">
-              <Placeholder
-                icon={Fuel}
-                title="Fuel estimate"
-                body="Add your vehicle's fuel consumption and TWENDE will estimate litres needed for this route."
-              />
-              <Placeholder
-                icon={Wallet}
-                title="Trip budget"
-                body="Fuel, stops and overnight costs will be combined into an estimated trip budget."
-              />
+            <SectionHeader
+              title="Ready to drive?"
+              description="Plan fuel, budget and travellers, then record the trip as you go."
+            />
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <p className="text-sm text-muted-foreground">
+                The planner estimates litres and fuel cost from your saved vehicle, builds a trip
+                budget in Kenyan shillings, and saves the plan as a trip you can start recording.
+              </p>
+              <Link
+                to="/routes/$id/plan"
+                params={{ id }}
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                Plan this trip
+              </Link>
             </div>
           </section>
         </article>
@@ -195,20 +199,3 @@ function Fact({
   );
 }
 
-function Placeholder({
-  icon: Icon,
-  title,
-  body,
-}: {
-  icon: typeof Fuel;
-  title: string;
-  body: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-dashed border-border bg-card p-5">
-      <Icon className="size-5 text-muted-foreground" strokeWidth={1.5} aria-hidden />
-      <p className="mt-3 font-medium">{title}</p>
-      <p className="mt-1 text-sm text-muted-foreground">{body}</p>
-    </div>
-  );
-}
