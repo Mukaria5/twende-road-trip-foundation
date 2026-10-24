@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { ArrowLeft, Clock, Fuel, MapPin, Mountain, Wallet } from "lucide-react";
+import { ArrowLeft, Clock, MapPin, Mountain } from "lucide-react";
 
 import { AppShell } from "@/components/twende/app-shell";
 import { JourneyTimeline } from "@/components/twende/journey-timeline";
