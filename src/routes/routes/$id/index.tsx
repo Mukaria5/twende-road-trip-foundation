@@ -148,18 +148,22 @@ function RouteDetailPage() {
           </section>
 
           <section>
-            <SectionHeader title="Trip planning" description="Arriving in a later phase." />
-            <div className="grid gap-3 sm:grid-cols-2">
-              <Placeholder
-                icon={Fuel}
-                title="Fuel estimate"
-                body="Add your vehicle's fuel consumption and TWENDE will estimate litres needed for this route."
-              />
-              <Placeholder
-                icon={Wallet}
-                title="Trip budget"
-                body="Fuel, stops and overnight costs will be combined into an estimated trip budget."
-              />
+            <SectionHeader
+              title="Ready to drive?"
+              description="Plan fuel, budget and travellers, then record the trip as you go."
+            />
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <p className="text-sm text-muted-foreground">
+                The planner estimates litres and fuel cost from your saved vehicle, builds a trip
+                budget in Kenyan shillings, and saves the plan as a trip you can start recording.
+              </p>
+              <Link
+                to="/routes/$id/plan"
+                params={{ id }}
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                Plan this trip
+              </Link>
             </div>
           </section>
         </article>
