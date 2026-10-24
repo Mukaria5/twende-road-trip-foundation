@@ -199,20 +199,3 @@ function Fact({
   );
 }
 
-function Placeholder({
-  icon: Icon,
-  title,
-  body,
-}: {
-  icon: typeof Fuel;
-  title: string;
-  body: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-dashed border-border bg-card p-5">
-      <Icon className="size-5 text-muted-foreground" strokeWidth={1.5} aria-hidden />
-      <p className="mt-3 font-medium">{title}</p>
-      <p className="mt-1 text-sm text-muted-foreground">{body}</p>
-    </div>
-  );
-}
