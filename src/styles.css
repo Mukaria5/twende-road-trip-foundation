@@ -1,6 +1,7 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+@import "leaflet/dist/leaflet.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -147,4 +148,32 @@
 
 @utility safe-bottom {
   padding-bottom: calc(env(safe-area-inset-bottom, 0px));
+}
+
+/* Leaflet markers and controls — TWENDE tokens, never hardcoded colors. */
+.leaflet-container {
+  background: var(--color-muted);
+  font: inherit;
+}
+
+.leaflet-control-attribution {
+  background: color-mix(in oklab, var(--color-background) 85%, transparent);
+  color: var(--color-muted-foreground);
+  font-size: 10px;
+  padding: 1px 6px;
+}
+
+.twende-map-pin {
+  color: var(--color-primary);
+  filter: drop-shadow(0 2px 2px oklch(0.18 0.02 55 / 35%));
+}
+
+.twende-map-user-dot {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: var(--color-forest);
+  border: 3px solid var(--color-card);
+  box-shadow: 0 0 0 6px oklch(0.44 0.062 148 / 25%);
 }
