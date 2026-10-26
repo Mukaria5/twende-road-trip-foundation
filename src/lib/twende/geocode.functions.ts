@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-import { MAP_PROVIDER } from "./map-providers";
+import { MAP_PROVIDER, type GeoPlace } from "./map-providers";
 
 export type GeoSearchError = "network" | "rate-limited" | "provider";
 
