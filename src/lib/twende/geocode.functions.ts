@@ -74,12 +74,12 @@ export const searchPlaces = createServerFn({ method: "GET" })
 
         const address = item.address ?? {};
         const locality =
-          address.city ||
-          address.town ||
-          address.village ||
-          address.municipality ||
-          address.county ||
-          address.state ||
+          address["city"] ||
+          address["town"] ||
+          address["village"] ||
+          address["municipality"] ||
+          address["county"] ||
+          address["state"] ||
           null;
 
         results.push({
