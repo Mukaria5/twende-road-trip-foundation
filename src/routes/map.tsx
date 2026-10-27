@@ -6,7 +6,6 @@ import {
   Crosshair,
   Loader2,
   MapPin,
-  Search,
 } from "lucide-react";
 import { Suspense, lazy, useEffect, useState } from "react";
 
