@@ -60,11 +60,13 @@ function MapPage() {
   const [geoStatus, setGeoStatus] = useState<GeoStatus>(null);
 
   // Debounce input so we stay well inside the geocoder's usage policy.
+  // A search result fills the input too — don't re-search the chosen place.
   useEffect(() => {
     const trimmed = searchValue.trim();
+    if (selected?.name === trimmed) return;
     const timer = setTimeout(() => setDebouncedQuery(trimmed), MAP_PROVIDER.search.debounceMs);
     return () => clearTimeout(timer);
-  }, [searchValue]);
+  }, [searchValue, selected]);
 
   const search = useQuery({
     queryKey: ["geosearch", debouncedQuery],
