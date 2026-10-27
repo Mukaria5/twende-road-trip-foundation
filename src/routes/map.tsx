@@ -19,6 +19,7 @@ import { searchPlaces, type GeoSearchError } from "@/lib/twende/geocode.function
 import {
   MAP_PROVIDER,
   formatLatLng,
+  type GeoPlace,
   type LatLngLiteral,
   type SelectedLocation,
   type UserLocationFix,
@@ -82,7 +83,7 @@ function MapPage() {
     setCenterKey(`${point.lat.toFixed(5)},${point.lng.toFixed(5)},${nextZoom}`);
   };
 
-  const choosePlace = (place: (typeof search.data)["results"][number]) => {
+  const choosePlace = (place: GeoPlace) => {
     setSearchValue(place.name);
     setDebouncedQuery("");
     setSelected({
