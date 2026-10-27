@@ -52,7 +52,7 @@ function MapPage() {
   const [selected, setSelected] = useState<SelectedLocation | null>(null);
   const [userLocation, setUserLocation] = useState<UserLocationFix | null>(null);
   const [center, setCenter] = useState<LatLngLiteral>(MAP_PROVIDER.kenyaCenter);
-  const [zoom, setZoom] = useState(MAP_PROVIDER.kenyaZoom);
+  const [zoom, setZoom] = useState<number>(MAP_PROVIDER.kenyaZoom);
   const [centerKey, setCenterKey] = useState("kenya");
   const [tilesLoading, setTilesLoading] = useState(false);
   const [tilesFailed, setTilesFailed] = useState(false);
