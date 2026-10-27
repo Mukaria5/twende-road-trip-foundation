@@ -7,7 +7,7 @@ import {
   Loader2,
   MapPin,
 } from "lucide-react";
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
 
 import { AppShell } from "@/components/twende/app-shell";
 import { PageHeader } from "@/components/twende/page-header";
