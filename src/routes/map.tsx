@@ -66,7 +66,10 @@ function MapPage() {
   useEffect(() => {
     const trimmed = searchValue.trim();
     if (selected?.name === trimmed) return;
-    const timer = setTimeout(() => setDebouncedQuery(trimmed), MAP_PROVIDER.search.debounceMs);
+    const timer = setTimeout(() => {
+      setDebouncedQuery(trimmed);
+      setResultsDismissed(false);
+    }, MAP_PROVIDER.search.debounceMs);
     return () => clearTimeout(timer);
   }, [searchValue, selected]);
 
@@ -164,7 +167,7 @@ function MapPage() {
         description="Search places, drop a pin and explore Kenya's roads."
       />
 
-      <div className="relative">
+      <div ref={searchBoxRef} className="relative">
         <SearchBar
           value={searchValue}
           onChange={setSearchValue}
