@@ -12,7 +12,7 @@
 - [x] Mount app-wide Sonner `<Toaster />` in `src/routes/__root.tsx`
 - [x] Verify: mobile (390px) flow — search → results → dismissal (outside + Escape)
   → place select → pin drop → 18/18 tiles loaded, no console errors
-- [ ] Production build check (harness build after this message)
+- [x] Production build check — build OK (Nov 2 2026)
 
 ## Done: App-style transformation (uploaded brief, Oct 22 2026)
 
