@@ -167,7 +167,7 @@ function MapPage() {
         description="Search places, drop a pin and explore Kenya's roads."
       />
 
-      <div ref={searchBoxRef} className="relative">
+      <div ref={searchBoxRef} className="relative z-[1100]">
         <SearchBar
           value={searchValue}
           onChange={setSearchValue}
