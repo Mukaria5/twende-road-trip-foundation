@@ -58,6 +58,8 @@ function MapPage() {
   const [tilesLoading, setTilesLoading] = useState(false);
   const [tilesFailed, setTilesFailed] = useState(false);
   const [geoStatus, setGeoStatus] = useState<GeoStatus>(null);
+  const searchBoxRef = useRef<HTMLDivElement | null>(null);
+  const [resultsDismissed, setResultsDismissed] = useState(false);
 
   // Debounce input so we stay well inside the geocoder's usage policy.
   // A search result fills the input too — don't re-search the chosen place.
@@ -75,9 +77,30 @@ function MapPage() {
     staleTime: 60_000,
   });
 
-  const showResults =
+  const baseShowResults =
     debouncedQuery.length >= MAP_PROVIDER.search.minLength &&
     (search.isPending || search.data !== undefined);
+  const showResults = baseShowResults && !resultsDismissed;
+
+  // Close the results sheet when tapping/clicking outside it, or on Escape.
+  useEffect(() => {
+    if (!baseShowResults || resultsDismissed) return;
+    const onPointerDown = (event: PointerEvent) => {
+      const box = searchBoxRef.current;
+      if (box && event.target instanceof Node && !box.contains(event.target)) {
+        setResultsDismissed(true);
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setResultsDismissed(true);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [baseShowResults, resultsDismissed]);
 
   const flyTo = (point: LatLngLiteral, nextZoom: number) => {
     setCenter(point);
