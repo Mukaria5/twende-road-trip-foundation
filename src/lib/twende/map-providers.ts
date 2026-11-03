@@ -32,6 +32,15 @@ export interface SelectedLocation {
   locality: string | null;
 }
 
+/** A chosen endpoint or intermediate stop on the map. */
+export interface TripPoint {
+  /** Place name only when resolved by the geocoder or GPS reverse lookup — never invented. */
+  name: string | null;
+  locality: string | null;
+  latitude: number;
+  longitude: number;
+}
+
 export interface UserLocationFix extends LatLngLiteral {
   /** GPS accuracy in metres, when reported. */
   accuracy: number | null;
@@ -50,6 +59,13 @@ export const MAP_PROVIDER = {
   /** Zoom used when a place result or pin is confirmed. */
   detailZoom: 15,
   userLocationZoom: 16,
+  routing: {
+    /** Alternative routes requested from the provider (0 = only the primary). */
+    maxAlternatives: 2,
+    /** Maximum intermediate stops sent to the routing provider. */
+    maxWaypoints: 8,
+    requestTimeoutMs: 12_000,
+  },
   search: {
     minLength: 3,
     debounceMs: 500,

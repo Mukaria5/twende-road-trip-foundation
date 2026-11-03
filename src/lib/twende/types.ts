@@ -29,6 +29,13 @@ export interface RouteStopRecord {
   display_order: number;
 }
 
+/** A planned intermediate stop persisted with a trip. */
+export interface TripWaypoint {
+  name: string | null;
+  latitude: number;
+  longitude: number;
+}
+
 export interface TripRecord {
   id: string;
   user_id: string;
@@ -49,6 +56,17 @@ export interface TripRecord {
   actual_fuel_litres: number | null;
   actual_fuel_cost: number | null;
   notes: string | null;
+  start_location_name: string | null;
+  start_latitude: number | null;
+  start_longitude: number | null;
+  destination_name: string | null;
+  destination_latitude: number | null;
+  destination_longitude: number | null;
+  waypoints: TripWaypoint[];
+  route_distance_km: number | null;
+  route_duration_minutes: number | null;
+  route_provider: string | null;
+  route_index: number | null;
   created_at: string;
 }
 
