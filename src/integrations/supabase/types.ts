@@ -420,6 +420,9 @@ export type Database = {
           actual_fuel_litres: number | null
           completed_at: string | null
           created_at: string
+          destination_latitude: number | null
+          destination_longitude: number | null
+          destination_name: string | null
           estimated_accommodation_cost: number | null
           estimated_activity_cost: number | null
           estimated_food_cost: number | null
@@ -430,7 +433,14 @@ export type Database = {
           id: string
           notes: string | null
           planned_distance_km: number | null
+          route_distance_km: number | null
+          route_duration_minutes: number | null
           route_id: string | null
+          route_index: number | null
+          route_provider: string | null
+          start_latitude: number | null
+          start_location_name: string | null
+          start_longitude: number | null
           started_at: string | null
           status: string
           title: string | null
@@ -439,6 +449,7 @@ export type Database = {
           updated_at: string
           user_id: string
           vehicle_id: string | null
+          waypoints: Json
         }
         Insert: {
           actual_distance_km?: number | null
@@ -447,6 +458,9 @@ export type Database = {
           actual_fuel_litres?: number | null
           completed_at?: string | null
           created_at?: string
+          destination_latitude?: number | null
+          destination_longitude?: number | null
+          destination_name?: string | null
           estimated_accommodation_cost?: number | null
           estimated_activity_cost?: number | null
           estimated_food_cost?: number | null
@@ -457,7 +471,14 @@ export type Database = {
           id?: string
           notes?: string | null
           planned_distance_km?: number | null
+          route_distance_km?: number | null
+          route_duration_minutes?: number | null
           route_id?: string | null
+          route_index?: number | null
+          route_provider?: string | null
+          start_latitude?: number | null
+          start_location_name?: string | null
+          start_longitude?: number | null
           started_at?: string | null
           status?: string
           title?: string | null
@@ -466,6 +487,7 @@ export type Database = {
           updated_at?: string
           user_id: string
           vehicle_id?: string | null
+          waypoints?: Json
         }
         Update: {
           actual_distance_km?: number | null
@@ -474,6 +496,9 @@ export type Database = {
           actual_fuel_litres?: number | null
           completed_at?: string | null
           created_at?: string
+          destination_latitude?: number | null
+          destination_longitude?: number | null
+          destination_name?: string | null
           estimated_accommodation_cost?: number | null
           estimated_activity_cost?: number | null
           estimated_food_cost?: number | null
@@ -484,7 +509,14 @@ export type Database = {
           id?: string
           notes?: string | null
           planned_distance_km?: number | null
+          route_distance_km?: number | null
+          route_duration_minutes?: number | null
           route_id?: string | null
+          route_index?: number | null
+          route_provider?: string | null
+          start_latitude?: number | null
+          start_location_name?: string | null
+          start_longitude?: number | null
           started_at?: string | null
           status?: string
           title?: string | null
@@ -493,6 +525,7 @@ export type Database = {
           updated_at?: string
           user_id?: string
           vehicle_id?: string | null
+          waypoints?: Json
         }
         Relationships: [
           {

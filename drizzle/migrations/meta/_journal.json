@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1793711041647,
+      "tag": "0000_trip_route_fields",
+      "breakpoints": true
+    }
+  ]
+}
