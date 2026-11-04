@@ -276,11 +276,11 @@ function MapFitter({
   stops,
 }: {
   fitKey: string;
-  routes?: CalculatedRoute[];
+  routes?: CalculatedRoute[] | undefined;
   selectedRouteIndex: number;
-  start?: TripPoint | null;
-  destination?: TripPoint | null;
-  stops?: TripPoint[];
+  start?: TripPoint | null | undefined;
+  destination?: TripPoint | null | undefined;
+  stops?: TripPoint[] | undefined;
 }) {
   const map = useMap();
   const lastFitKey = useRef<string | null>(null);
@@ -291,7 +291,11 @@ function MapFitter({
     const points: [number, number][] = [];
     const selectedRoute = routes?.[Math.min(selectedRouteIndex, (routes?.length ?? 1) - 1)];
     if (selectedRoute) {
-      for (const pair of selectedRoute.coordinates) points.push(pair);
+      for (const pair of selectedRoute.coordinates) {
+        if (Array.isArray(pair) && Number.isFinite(pair[0]) && Number.isFinite(pair[1])) {
+          points.push([pair[0], pair[1]]);
+        }
+      }
     }
     if (points.length < 2) {
       points.length = 0;

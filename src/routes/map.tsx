@@ -159,7 +159,10 @@ function MapPage() {
   });
 
   // A new selection invalidates the previously chosen route option.
+  const lastTripKey = useRef(tripKey);
   useEffect(() => {
+    if (lastTripKey.current === tripKey) return;
+    lastTripKey.current = tripKey;
     setRouteIndex(0);
   }, [tripKey]);
 
