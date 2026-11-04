@@ -1,13 +1,22 @@
 import L from "leaflet";
 import { useEffect, useMemo, useRef } from "react";
-import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  Polyline,
+  TileLayer,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
 
 import {
   MAP_PROVIDER,
   type LatLngLiteral,
   type SelectedLocation,
+  type TripPoint,
   type UserLocationFix,
 } from "@/lib/twende/map-providers";
+import type { CalculatedRoute } from "@/lib/twende/route.functions";
 
 interface MapViewProps {
   center: LatLngLiteral;
@@ -20,6 +29,15 @@ interface MapViewProps {
   onTilesLoading: (loading: boolean) => void;
   onTilesError: (failed: boolean) => void;
   onReady?: (map: L.Map) => void;
+  /** Planned trip endpoints and intermediate stops (Phase 2). */
+  start?: TripPoint | null;
+  destination?: TripPoint | null;
+  stops?: TripPoint[];
+  /** Candidate driving routes; index 0 is the primary. */
+  routes?: CalculatedRoute[];
+  selectedRouteIndex?: number;
+  /** Changes whenever the map should re-fit to the trip/route. */
+  fitKey?: string;
 }
 
 /** Browser-only component: always loaded via React.lazy behind <ClientOnly>. */
@@ -33,6 +51,12 @@ export default function MapView({
   onTilesLoading,
   onTilesError,
   onReady,
+  start,
+  destination,
+  stops,
+  routes,
+  selectedRouteIndex = 0,
+  fitKey,
 }: MapViewProps) {
   const mapRef = useRef<L.Map | null>(null);
   const lastCenterKey = useRef<string | null>(null);
@@ -64,6 +88,19 @@ export default function MapView({
     return () => observer.disconnect();
   }, []);
 
+  // Route lines use the design tokens' computed values — SVG path attributes
+  // cannot resolve var() directly.
+  const lineColors = useMemo(() => {
+    if (typeof window === "undefined") {
+      return { primary: "#b4551e", muted: "#8a7f74" };
+    }
+    const styles = getComputedStyle(document.documentElement);
+    return {
+      primary: styles.getPropertyValue("--color-primary").trim() || "#b4551e",
+      muted: styles.getPropertyValue("--color-muted-foreground").trim() || "#8a7f74",
+    };
+  }, []);
+
   const pinIcon = useMemo(
     () =>
       L.divIcon({
@@ -85,6 +122,41 @@ export default function MapView({
       }),
     [],
   );
+
+  const startIcon = useMemo(
+    () =>
+      L.divIcon({
+        className: "twende-map-endpoint",
+        html: '<span class="twende-endpoint" aria-hidden="true">A</span>',
+        iconSize: [26, 26],
+        iconAnchor: [13, 13],
+      }),
+    [],
+  );
+
+  const destinationIcon = useMemo(
+    () =>
+      L.divIcon({
+        className: "twende-map-endpoint",
+        html: '<span class="twende-endpoint twende-endpoint-dest" aria-hidden="true">B</span>',
+        iconSize: [26, 26],
+        iconAnchor: [13, 13],
+      }),
+    [],
+  );
+
+  const stopIcon = useMemo(
+    () =>
+      L.divIcon({
+        className: "twende-map-endpoint",
+        html: '<span class="twende-endpoint twende-endpoint-stop" aria-hidden="true"></span>',
+        iconSize: [14, 14],
+        iconAnchor: [7, 7],
+      }),
+    [],
+  );
+
+  const selectedRoute = routes?.[Math.min(selectedRouteIndex, routes.length - 1)] ?? null;
 
   return (
     <MapContainer
@@ -112,6 +184,41 @@ export default function MapView({
         }}
       />
       <MapClickHandler onSelect={onSelect} />
+      <MapFitter
+        fitKey={fitKey ?? ""}
+        routes={routes}
+        selectedRouteIndex={selectedRouteIndex}
+        start={start}
+        destination={destination}
+        stops={stops}
+      />
+
+      {routes?.map((route, index) => {
+        if (route === selectedRoute) return null;
+        return (
+          <Polyline
+            key={`alternative-${index}`}
+            positions={route.coordinates}
+            pathOptions={{
+              color: lineColors.muted,
+              weight: 4,
+              opacity: 0.5,
+              dashArray: "1 9",
+              lineCap: "round",
+            }}
+            interactive={false}
+          />
+        );
+      })}
+      {selectedRoute && (
+        <Polyline
+          key={`selected-${selectedRouteIndex}-${selectedRoute.coordinates.length}`}
+          positions={selectedRoute.coordinates}
+          pathOptions={{ color: lineColors.primary, weight: 5, opacity: 0.9 }}
+          interactive={false}
+        />
+      )}
+
       {selected && (
         <Marker
           position={[selected.latitude, selected.longitude]}
@@ -126,6 +233,28 @@ export default function MapView({
           keyboard={false}
         />
       )}
+      {start && (
+        <Marker
+          position={[start.latitude, start.longitude]}
+          icon={startIcon}
+          keyboard={false}
+        />
+      )}
+      {destination && (
+        <Marker
+          position={[destination.latitude, destination.longitude]}
+          icon={destinationIcon}
+          keyboard={false}
+        />
+      )}
+      {(stops ?? []).map((stop, index) => (
+        <Marker
+          key={`stop-${index}-${stop.latitude}-${stop.longitude}`}
+          position={[stop.latitude, stop.longitude]}
+          icon={stopIcon}
+          keyboard={false}
+        />
+      ))}
     </MapContainer>
   );
 }
@@ -134,5 +263,48 @@ function MapClickHandler({ onSelect }: { onSelect: (point: LatLngLiteral) => voi
   useMapEvents({
     click: (event) => onSelect({ lat: event.latlng.lat, lng: event.latlng.lng }),
   });
+  return null;
+}
+
+/** Re-fits the viewport to the planned route, or to the chosen points. */
+function MapFitter({
+  fitKey,
+  routes,
+  selectedRouteIndex,
+  start,
+  destination,
+  stops,
+}: {
+  fitKey: string;
+  routes?: CalculatedRoute[];
+  selectedRouteIndex: number;
+  start?: TripPoint | null;
+  destination?: TripPoint | null;
+  stops?: TripPoint[];
+}) {
+  const map = useMap();
+  const lastFitKey = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!fitKey || lastFitKey.current === fitKey) return;
+    lastFitKey.current = fitKey;
+    const points: [number, number][] = [];
+    const selectedRoute = routes?.[Math.min(selectedRouteIndex, (routes?.length ?? 1) - 1)];
+    if (selectedRoute) {
+      for (const pair of selectedRoute.coordinates) points.push(pair);
+    }
+    if (points.length < 2) {
+      points.length = 0;
+      for (const point of [start, destination, ...(stops ?? [])]) {
+        if (point) points.push([point.latitude, point.longitude]);
+      }
+    }
+    if (points.length >= 2) {
+      map.fitBounds(L.latLngBounds(points), { padding: [36, 36] });
+    } else if (points.length === 1) {
+      map.setView(points[0], Math.max(map.getZoom(), 13));
+    }
+  }, [fitKey, routes, selectedRouteIndex, start, destination, stops]);
+
   return null;
 }
