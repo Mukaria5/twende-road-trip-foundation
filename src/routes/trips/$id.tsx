@@ -167,6 +167,47 @@ function TripDetailPage() {
   const noteRows = notes.data ?? [];
   const photoRows = photos.data ?? [];
 
+  // Planned-route view model: only when the trip carried real map points.
+  const startPoint =
+    record.start_latitude != null && record.start_longitude != null
+      ? {
+          name: record.start_location_name,
+          locality: null,
+          latitude: record.start_latitude,
+          longitude: record.start_longitude,
+        }
+      : null;
+  const destinationPoint =
+    record.destination_latitude != null && record.destination_longitude != null
+      ? {
+          name: record.destination_name,
+          locality: null,
+          latitude: record.destination_latitude,
+          longitude: record.destination_longitude,
+        }
+      : null;
+  const plannedStops: TripPoint[] = (Array.isArray(record.waypoints) ? record.waypoints : [])
+    .filter(
+      (point) => typeof point?.latitude === "number" && typeof point?.longitude === "number",
+    )
+    .map((point) => ({
+      name: typeof point?.name === "string" ? point.name : null,
+      locality: null,
+      latitude: point.latitude,
+      longitude: point.longitude,
+    }));
+  const plannedRoutes =
+    plannedRoute.data && !plannedRoute.data.error ? plannedRoute.data.routes : [];
+  const plannedDistanceKm = plannedRoutes[0]?.distanceKm ?? record.route_distance_km ?? null;
+  const plannedDurationMinutes =
+    plannedRoutes[0]?.durationMinutes ?? record.route_duration_minutes ?? null;
+  const tripCenter = startPoint && destinationPoint
+    ? {
+        lat: (startPoint.latitude + destinationPoint.latitude) / 2,
+        lng: (startPoint.longitude + destinationPoint.longitude) / 2,
+      }
+    : null;
+
   return (
     <AppShell>
       <Link
