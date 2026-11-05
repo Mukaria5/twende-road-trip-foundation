@@ -92,7 +92,7 @@ function TripDetailPage() {
               (point) =>
                 typeof point?.latitude === "number" && typeof point?.longitude === "number",
             )
-            .map((point) => toRoutePoint(point)),
+            .map((point) => ({ latitude: point.latitude, longitude: point.longitude })),
         },
       }),
     enabled: Boolean(trip.data?.start_latitude != null && trip.data?.destination_latitude != null),
