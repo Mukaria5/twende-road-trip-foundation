@@ -306,7 +306,8 @@ function MapFitter({
     if (points.length >= 2) {
       map.fitBounds(L.latLngBounds(points), { padding: [36, 36] });
     } else if (points.length === 1) {
-      map.setView(points[0], Math.max(map.getZoom(), 13));
+      const only = points[0];
+      if (only) map.setView(only, Math.max(map.getZoom(), 13));
     }
   }, [fitKey, routes, selectedRouteIndex, start, destination, stops]);
 
