@@ -34,6 +34,7 @@ import {
 } from "@/lib/twende/trip-queries";
 import { calculateRoute } from "@/lib/twende/route.functions";
 import { routeErrorText } from "@/lib/twende/route-messages";
+import type { TripPoint } from "@/lib/twende/map-providers";
 import {
   encodeTripPoint,
   encodeWaypoints,
@@ -314,6 +315,98 @@ function TripDetailPage() {
                 ? `${formatKes(record.estimated_total_cost / record.travellers)} per person`
                 : undefined}
             />
+          </div>
+        </section>
+      )}
+
+      {startPoint && destinationPoint && tripCenter && (
+        <section className="mt-8">
+          <SectionHeader
+            title="Planned route"
+            description="The route you planned before setting off."
+          />
+          <div className="rounded-2xl border border-border bg-card p-4">
+            <ul className="space-y-1.5 text-sm">
+              <li>
+                <span className="font-semibold text-forest">Start:</span>{" "}
+                {pointLabel(startPoint)}
+              </li>
+              {plannedStops.map((stop, index) => (
+                <li key={`${stop.latitude}-${stop.longitude}-${index}`}>
+                  <span className="text-muted-foreground">Stop {index + 1}:</span>{" "}
+                  {pointLabel(stop)}
+                </li>
+              ))}
+              <li>
+                <span className="font-semibold text-primary">Destination:</span>{" "}
+                {pointLabel(destinationPoint)}
+              </li>
+            </ul>
+            <dl className="mt-3 grid grid-cols-2 gap-3 border-t border-border pt-3 text-xs text-muted-foreground">
+              <div>
+                <dt>Planned driving distance</dt>
+                <dd className="mt-0.5 text-sm font-medium text-foreground">
+                  {formatDistance(plannedDistanceKm)}
+                </dd>
+              </div>
+              <div>
+                <dt>Planned time on the road</dt>
+                <dd className="mt-0.5 text-sm font-medium text-foreground">
+                  {formatDuration(plannedDurationMinutes)}
+                </dd>
+              </div>
+            </dl>
+            {plannedRoute.data?.error && (
+              <p className="mt-2 text-xs text-muted-foreground">
+                {routeErrorText(plannedRoute.data.error)} The planned points are still shown below.
+              </p>
+            )}
+            <Link
+              to="/map"
+              search={{
+                start: encodeTripPoint(startPoint),
+                dest: encodeTripPoint(destinationPoint),
+                wp: encodeWaypoints(plannedStops),
+              }}
+              className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary underline-offset-4 hover:underline"
+            >
+              Open on the map
+            </Link>
+          </div>
+          <div className="relative mt-3 overflow-hidden rounded-2xl border border-border bg-muted">
+            <div className="relative h-[46vh] min-h-[300px]">
+              <ClientOnly
+                fallback={
+                  <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                    Loading map…
+                  </div>
+                }
+              >
+                <Suspense
+                  fallback={
+                    <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                      Loading map…
+                    </div>
+                  }
+                >
+                  <MapView
+                    center={tripCenter}
+                    centerKey={`trip-${record.id}`}
+                    zoom={6}
+                    selected={null}
+                    userLocation={null}
+                    onSelect={() => {}}
+                    onTilesLoading={() => {}}
+                    onTilesError={() => {}}
+                    start={startPoint}
+                    destination={destinationPoint}
+                    stops={plannedStops}
+                    routes={plannedRoutes}
+                    fitKey={`trip-${record.id}-${plannedRoutes.length}`}
+                  />
+                </Suspense>
+              </ClientOnly>
+            </div>
           </div>
         </section>
       )}
