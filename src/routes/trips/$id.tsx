@@ -1,5 +1,6 @@
+import { Suspense, lazy } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { ClientOnly, createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowLeft,
   CalendarDays,
@@ -31,6 +32,17 @@ import {
   tripStopsQuery,
   tripTrackQuery,
 } from "@/lib/twende/trip-queries";
+import { calculateRoute } from "@/lib/twende/route.functions";
+import { routeErrorText } from "@/lib/twende/route-messages";
+import {
+  encodeTripPoint,
+  encodeWaypoints,
+  pointLabel,
+  toRoutePoint,
+} from "@/lib/twende/trip-params";
+
+/** Browser-only (Leaflet): loaded lazily so SSR never imports it. */
+const MapView = lazy(() => import("@/components/twende/map-view"));
 
 
 export const Route = createFileRoute("/trips/$id")({
@@ -59,6 +71,32 @@ function TripDetailPage() {
   const notes = useQuery({ ...tripNotesQuery(id), enabled: Boolean(user) });
   const fuel = useQuery({ ...tripFuelQuery(id), enabled: Boolean(user) });
   const photos = useQuery({ ...tripPhotosQuery(id), enabled: Boolean(user) });
+
+  // The route planned before setting off — re-drawn from the persisted points.
+  const plannedRoute = useQuery({
+    queryKey: ["trip-planned-route", id],
+    queryFn: () =>
+      calculateRoute({
+        data: {
+          start: {
+            latitude: trip.data!.start_latitude!,
+            longitude: trip.data!.start_longitude!,
+          },
+          destination: {
+            latitude: trip.data!.destination_latitude!,
+            longitude: trip.data!.destination_longitude!,
+          },
+          waypoints: (Array.isArray(trip.data!.waypoints) ? trip.data!.waypoints : [])
+            .filter(
+              (point) =>
+                typeof point?.latitude === "number" && typeof point?.longitude === "number",
+            )
+            .map((point) => toRoutePoint(point)),
+        },
+      }),
+    enabled: Boolean(trip.data?.start_latitude != null && trip.data?.destination_latitude != null),
+    staleTime: 5 * 60_000,
+  });
 
   if (loading) {
     return (
