@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as MapRouteImport } from './routes/map'
+import { Route as PlanRouteImport } from './routes/plan'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SettingsRouteImport } from './routes/settings'
@@ -47,6 +48,11 @@ const ExploreRoute = ExploreRouteImport.update({
 const MapRoute = MapRouteImport.update({
   id: '/map',
   path: '/map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanRoute = PlanRouteImport.update({
+  id: '/plan',
+  path: '/plan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/community': typeof CommunityRoute
   '/explore': typeof ExploreRoute
   '/map': typeof MapRoute
+  '/plan': typeof PlanRoute
   '/profile': typeof ProfileRoute
   '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/community': typeof CommunityRoute
   '/explore': typeof ExploreRoute
   '/map': typeof MapRoute
+  '/plan': typeof PlanRoute
   '/profile': typeof ProfileRoute
   '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/community': typeof CommunityRoute
   '/explore': typeof ExploreRoute
   '/map': typeof MapRoute
+  '/plan': typeof PlanRoute
   '/profile': typeof ProfileRoute
   '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
@@ -152,6 +161,7 @@ export interface FileRouteTypes {
     | '/community'
     | '/explore'
     | '/map'
+    | '/plan'
     | '/profile'
     | '/reset-password'
     | '/settings'
@@ -168,6 +178,7 @@ export interface FileRouteTypes {
     | '/community'
     | '/explore'
     | '/map'
+    | '/plan'
     | '/profile'
     | '/reset-password'
     | '/settings'
@@ -184,6 +195,7 @@ export interface FileRouteTypes {
     | '/community'
     | '/explore'
     | '/map'
+    | '/plan'
     | '/profile'
     | '/reset-password'
     | '/settings'
@@ -201,6 +213,7 @@ export interface RootRouteChildren {
   CommunityRoute: typeof CommunityRoute
   ExploreRoute: typeof ExploreRoute
   MapRoute: typeof MapRoute
+  PlanRoute: typeof PlanRoute
   ProfileRoute: typeof ProfileRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SettingsRoute: typeof SettingsRoute
@@ -247,6 +260,13 @@ declare module '@tanstack/react-router' {
       path: '/map'
       fullPath: '/map'
       preLoaderRoute: typeof MapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plan': {
+      id: '/plan'
+      path: '/plan'
+      fullPath: '/plan'
+      preLoaderRoute: typeof PlanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -321,6 +341,7 @@ const rootRouteChildren: RootRouteChildren = {
   CommunityRoute: CommunityRoute,
   ExploreRoute: ExploreRoute,
   MapRoute: MapRoute,
+  PlanRoute: PlanRoute,
   ProfileRoute: ProfileRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SettingsRoute: SettingsRoute,
